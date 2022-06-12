@@ -1,24 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from 'react'
+import DesignBoard from './component/DesignBoard'
+import ToolBar from './component/ToolBar'
+import { ActionCreators as UndoActionCreators } from 'redux-undo'
+import { useDispatch } from 'react-redux'
 
 function App() {
+  const dispath = useDispatch()
+  
+  const onKeyDown = (e:KeyboardEvent) => {
+
+    if (e.metaKey && e.key == 'Backspace') {
+      e.preventDefault()
+      return
+    }
+
+    if (e.metaKey && e.key == 'c') {
+    
+      e.preventDefault()
+      return
+    }
+
+    if (e.metaKey && e.key == 'x') {
+
+      e.preventDefault()
+      return
+    }
+
+    if (e.metaKey && e.key == 'z') {
+      dispath(UndoActionCreators.undo())
+      e.preventDefault()
+      return      
+    }
+    
+    if (e.metaKey && e.key == 'y') {
+      dispath(UndoActionCreators.redo())
+      e.preventDefault()
+      return      
+    }  
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown, true)
+
+    return (() => {
+      window.removeEventListener('keydown', onKeyDown, true)
+    }) 
+  })
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ToolBar/>
+      <DesignBoard/>
     </div>
   );
 }
